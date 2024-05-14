@@ -1,6 +1,5 @@
 
 <?php
-# Arvin Reil Tupal
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\OfferController;
@@ -55,7 +54,6 @@ Route::put('/update-offer/{id}', [OfferController::class, 'update'])->name('offe
 Route::get('/search-student-page', [EnrollmentController::class, 'index'])->name('enrollment.index');
 Route::get('/search-student', [EnrollmentController::class, 'search'])->name('enrollment.search');
 Route::get('/student/{id}', [EnrollmentController::class, 'show'])->name('enrollment.show_student');
-Route::post('/offer/store-teacher-assignment', [EnrollmentController::class, 'storeTeacherAssignment'])->name('enrollment.store_teacher_assignment');
 Route::post('/enroll', [EnrollmentController::class, 'enroll'])->name('enrollment.enroll');
 Route::delete('/unenroll/{enrollment}', [EnrollmentController::class, 'unenroll'])->name('enrollment.unenroll');
 

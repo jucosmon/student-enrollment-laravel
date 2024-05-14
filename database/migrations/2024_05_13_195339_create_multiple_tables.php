@@ -55,14 +55,14 @@ return new class extends Migration
 
         Schema::create('offers', function (Blueprint $table){
             $table->id();
-            $table->char('section');
+            $table->char('section')->nullable();
             $table->string('schedule')->nullable();
             $table->string('room')->nullable();
             $table->integer('capacity')->default('40');
             $table->integer('year_level');
             $table->foreignId('program_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
+            $table->foreignId('teacher_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
         Schema::create('enrollments', function (Blueprint $table){
