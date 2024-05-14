@@ -8,22 +8,20 @@
             </div>
         @endif
 
-        <div class="row">
-            <div class="col-md-6">
-                <h1>Student Information</h1>
-                <p><strong>Name:</strong> {{ $student->first_name }} {{ $student->last_name }}</p>
-                <p><strong>Birthday:</strong> {{ $student->birthday }}</p>
-                <p><strong>Sex:</strong> {{ $student->sex }}</p>
-                <p><strong>Program Code:</strong> {{ $student->program->code }}</p>
-                <p><strong>Program Level:</strong> {{ $student->year_level }}</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8" style="width: 60%; margin: 0 auto;">
+                <div class="text-center">
+                    <p><strong>Student:</strong> {{ $student->first_name }} {{ $student->last_name }} ({{ $student->program->code }}  {{ $student->year_level }})</p>
+                </div>
             </div>
+
         </div>
 
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <h2>Enrollment Records</h2>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <h2 class="text-center">Enrollment Records</h2>
                 @if (count($enrollments) > 0)
-                    <table class="table table-striped">
+                    <table class="table table-striped text-center">
                         <thead>
                             <tr>
                                 <th>Subject</th>
@@ -36,32 +34,32 @@
                         <tbody>
                             @foreach ($enrollments as $enrollment)
                                 <tr>
-                                    <td>{{ $enrollment->subject }}</td>
+                                    <td>{{ $enrollment->subject->code }}</td>
                                     <td>{{ $enrollment->section }}</td>
                                     <td>{{ $enrollment->schedule }}</td>
                                     <td>{{ $enrollment->room }}</td>
                                     <td>
-                                        <form action="{{ route('enrollment.unenroll', $enrollment->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Unenroll</button>
-                                        </form>
+                                    <form action="{{ route('enrollment.unenroll', ['studentId' => $student->id, 'offerId' => $enrollment->id]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">Unenroll</button>
+                                    </form>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 @else
-                    <p>No enrollments yet.</p>
+                    <p class="text-center">No enrollments yet.</p>
                 @endif
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <h2>Available Enrollments</h2>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <h2 class="text-center">Available Enrollments</h2>
                 @if (count($availableEnrollments) > 0)
-                    <table class="table table-striped">
+                    <table class="table table-striped text-center">
                         <thead>
                             <tr>
                                 <th>Subject</th>
@@ -84,11 +82,10 @@
                                             Unassigned yet
                                         @endif
                                     </td>
-
                                     <td>{{ $enrollment->schedule }}</td>
                                     <td>{{ $enrollment->room }}</td>
                                     <td>
-                                        <form action="{{ route('enrollment.enroll') }}" method="POST">
+                                        <form action="{{ route('enrollment.enroll', ['student_id' => $student->id, 'offer_id' => $enrollment->id]) }}" method="POST">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-primary">Enroll</button>
                                         </form>
@@ -98,7 +95,7 @@
                         </tbody>
                     </table>
                 @else
-                    <p>No available enrollments for the student's program and year level.</p>
+                    <p class="text-center">No available enrollments for the student's program and year level.</p>
                 @endif
             </div>
         </div>

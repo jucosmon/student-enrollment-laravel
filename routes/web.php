@@ -53,7 +53,6 @@ Route::put('/update-offer/{id}', [OfferController::class, 'update'])->name('offe
 //managing enrollment
 Route::get('/search-student-page', [EnrollmentController::class, 'index'])->name('enrollment.index');
 Route::get('/search-student', [EnrollmentController::class, 'search'])->name('enrollment.search');
-Route::get('/student/{id}', [EnrollmentController::class, 'show'])->name('enrollment.show_student');
-Route::post('/enroll', [EnrollmentController::class, 'enroll'])->name('enrollment.enroll');
-Route::delete('/unenroll/{enrollment}', [EnrollmentController::class, 'unenroll'])->name('enrollment.unenroll');
+Route::post('/enroll/{student_id}/{offer_id}', [EnrollmentController::class, 'enroll'])->name('enrollment.enroll');
+Route::delete('/unenroll/{studentId}/{offerId}', [EnrollmentController::class, 'unenroll'])->name('enrollment.unenroll');
 

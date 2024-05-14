@@ -17,7 +17,10 @@
                     <label for="student_id">Student ID</label>
                     <input type="text" class="form-control" id="student_id" name="student_id" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Search</button>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Search</button>
+
+                </div>
             </form>
         </div>
     </div>

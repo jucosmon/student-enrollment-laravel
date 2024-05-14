@@ -15,56 +15,57 @@ class EnrollmentController extends Controller
     public function index()
     {
         //
-        return(view('enrollment.index'));
+        return view('enrollment.index');
     }
 
     public function search(Request $request)
-    {
-        $studentId = $request->input('student_id');
-        $student = Student::where('id', $studentId)->first();
+{
+    $studentId = $request->input('student_id');
+    $student = Student::where('id', $studentId)->first();
 
-        if (!$student) {
-            return redirect()->back()->with('error', 'Student not found.');
-        }
-
-        $enrollments = $student->offers;
-        $availableEnrollments = Offer::where('program_id', $student->program_id)
-            ->where('year_level', $student->year_level)
-            ->get();
-
-        return view('enrollment.show', compact('student', 'enrollments', 'availableEnrollments'));
+    if (!$student) {
+        return redirect()->back()->with('error', 'Student not found.');
     }
 
-    public function enroll(Request $request)
-    {
-        $studentId = $request->input('student_id');
-        $offerId = $request->input('offer_id');
+    $enrollments = $student->offers;
 
-        $offer = Offer::findOrFail($offerId);
-        $subjectId = $offer->subject_id;
+    $availableEnrollments = Offer::where('program_id', $student->program_id)
+        ->where('year_level', $student->year_level)
+        ->whereNotIn('id', $enrollments->pluck('id'))
+        ->get();
 
-        // Check if the student is already enrolled in the subject
-        $isEnrolled = Enrollment::where('student_id', $studentId)
-                                ->whereHas('offer', function ($query) use ($subjectId) {
-                                    $query->where('subject_id', $subjectId);
-                                })->exists();
+    return view('enrollment.show', compact('student', 'enrollments', 'availableEnrollments'));
+}
 
-        if ($isEnrolled) {
-            return redirect()->back()->with('error', 'Student is already enrolled in this subject.');
-        }
+public function enroll($studentId, $offerId)
+{
+    // Get the offer object
+    $offer = Offer::findOrFail($offerId);
 
-        // Proceed with enrollment
-        Enrollment::create([
-            'student_id' => $studentId,
-            'offer_id' => $offerId,
-        ]);
+    // Check if the student is already enrolled in the same subject
+    $existingSubject = Enrollment::where('student_id', $studentId)
+        ->whereHas('offer', function ($query) use ($offer) {
+            $query->where('subject_id', $offer->subject_id);
+        })
+        ->first();
 
-        return redirect()->back()->with('success', 'Enrollment successful.');
-
+    if ($existingSubject) {
+        // Return an error message if the student is already enrolled in the same subject
+        return redirect()->back()->with('error', 'Student is already enrolled in this subject.');
     }
 
+    // Proceed with enrollment
+    Enrollment::create([
+        'student_id' => $studentId,
+        'offer_id' => $offerId,
+    ]);
 
-        public function unenroll($studentId, $offerId)
+    return redirect()->back()->with('success', 'Student enrolled.');
+}
+
+
+
+    public function unenroll($studentId, $offerId)
     {
         // Find the enrollment record for the given student ID and offer ID
         $enrollment = Enrollment::where('student_id', $studentId)->where('offer_id', $offerId)->first();
@@ -77,20 +78,9 @@ class EnrollmentController extends Controller
             return redirect()->back()->with('error', 'Enrollment not found.');
         }
     }
-
-
-
-    public function show($id)
-    {
-
-
-    }
-
-
     /**
      * Show the form for creating a new resource.
      */
-
     public function create()
     {
         //
@@ -107,7 +97,10 @@ class EnrollmentController extends Controller
     /**
      * Display the specified resource.
      */
-
+    public function show(Enrollment $enrollment)
+    {
+        //
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -125,11 +118,4 @@ class EnrollmentController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Enrollment $enrollment)
-    {
-        //
-    }
 }
