@@ -11,7 +11,8 @@
         <div class="row justify-content-center">
             <div class="col-md-8" style="width: 60%; margin: 0 auto;">
                 <div class="text-center">
-                    <p><strong>Student:</strong> {{ $student->first_name }} {{ $student->last_name }} ({{ $student->program->code }}  {{ $student->year_level }})</p>
+                    <p class=""><strong> {{ $student->first_name }} {{ $student->last_name }}</strong>
+                        ({{ $student->program->code }} {{ $student->year_level }})</p>
                 </div>
             </div>
 
@@ -39,11 +40,13 @@
                                     <td>{{ $enrollment->schedule }}</td>
                                     <td>{{ $enrollment->room }}</td>
                                     <td>
-                                    <form action="{{ route('enrollment.unenroll', ['studentId' => $student->id, 'offerId' => $enrollment->id]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">Unenroll</button>
-                                    </form>
+                                        <form
+                                            action="{{ route('enrollment.unenroll', ['studentId' => $student->id, 'offerId' => $enrollment->id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Unenroll</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -57,7 +60,8 @@
 
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
-                <h2 class="text-center">Available Enrollments</h2>
+                <h2 class="text-center">Available Enrollments for {{ $student->program->code }} {{ $student->year_level }}
+                </h2>
                 @if (count($availableEnrollments) > 0)
                     <table class="table table-striped text-center">
                         <thead>
@@ -75,6 +79,7 @@
                                 <tr>
                                     <td>{{ $enrollment->subject->code }}</td>
                                     <td>{{ $enrollment->section }}</td>
+                                    </td>
                                     <td>
                                         @if ($enrollment->teacher)
                                             {{ $enrollment->teacher->first_name }} {{ $enrollment->teacher->last_name }}
@@ -85,7 +90,9 @@
                                     <td>{{ $enrollment->schedule }}</td>
                                     <td>{{ $enrollment->room }}</td>
                                     <td>
-                                        <form action="{{ route('enrollment.enroll', ['student_id' => $student->id, 'offer_id' => $enrollment->id]) }}" method="POST">
+                                        <form
+                                            action="{{ route('enrollment.enroll', ['student_id' => $student->id, 'offer_id' => $enrollment->id]) }}"
+                                            method="POST">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-primary">Enroll</button>
                                         </form>

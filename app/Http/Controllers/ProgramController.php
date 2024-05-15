@@ -39,7 +39,6 @@ class ProgramController extends Controller
             'name' => 'required|string',
         ]);
 
-
         Program::create($validatedData);
         $programs = Program::all() ?? [];
 
@@ -47,13 +46,6 @@ class ProgramController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Program $program)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

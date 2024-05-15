@@ -17,6 +17,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Subject</th>
+                            <th>Name</th>
                             <th>Section</th>
                             <th>Schedule</th>
                             <th>Room</th>
@@ -30,6 +31,7 @@
                         @foreach ($offers as $offer)
                             <tr>
                                 <td>{{ $offer->id }}</td>
+                                <td>{{ $offer->subject->code }}</td>
                                 <td>{{ $offer->subject->name }}</td>
                                 <td>{{ $offer->section }}</td>
                                 <td>{{ $offer->schedule }}</td>

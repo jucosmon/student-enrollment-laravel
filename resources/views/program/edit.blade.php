@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="container mt-lg-5">
+        @if (session('error'))
+            <div class="alert alert-danger text-center">
+                {{ session('error') }}
+            </div>
+        @endif
         <h1 class="text-center">Edit Program</h1>
         <div style="margin-left: 10%;margin-right:10%;">
             <form action="{{ route('program.update', $program->id) }}" method="POST">
